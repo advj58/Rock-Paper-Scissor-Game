@@ -1,0 +1,40 @@
+// App.js
+import React, { useState } from 'react';
+import axios from 'axios';
+
+const App = () => {
+  const [playerOne, setPlayerOne] = useState({ name: '', score: 0 });
+  const [playerTwo, setPlayerTwo] = useState({ name: '', score: 0 });
+  const [currentRound, setCurrentRound] = useState(1);
+  const [winner, setWinner] = useState('');
+
+  const choices = ['stone', 'paper', 'scissors'];
+
+  const playRound = (playerOneChoice, playerTwoChoice) => {
+    axios.post('/play-round', { playerOneChoice, playerTwoChoice })
+      .then(response => {
+        const { winner, playerOneScore, playerTwoScore } = response.data;
+        if (winner === 'playerOne') {
+          setPlayerOne(prev => ({ ...prev, score: playerOneScore }));
+        } else if (winner === 'playerTwo') {
+          setPlayerTwo(prev => ({ ...prev, score: playerTwoScore }));
+        }
+        setCurrentRound(currentRound + 1);
+        if (currentRound === 6) {
+          setWinner(winner);
+        }
+      })
+      .catch(error => console.error('Error playing round:', error));
+  };
+
+  // Add form to set player names and buttons for choices...
+
+  return (
+    <div>
+      {/* Display player names, scores, and winner */}
+      {/* Display buttons for stone, paper, scissors */}
+    </div>
+  );
+};
+
+export default App;
