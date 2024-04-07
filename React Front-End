@@ -1,0 +1,79 @@
+import React, { useState } from 'react';
+
+const choices = ['stone', 'paper', 'scissors'];
+
+function determineWinner(player1, player2) {
+  if (player1 === player2) return 'tie';
+  if (
+    (player1 === 'stone' && player2 === 'scissors') ||
+    (player1 === 'scissors' && player2 === 'paper') ||
+    (player1 === 'paper' && player2 === 'stone')
+  ) {
+    return 'player1';
+  }
+  return 'player2';
+}
+
+function Game() {
+  const [player1, setPlayer1] = useState('');
+  const [player2, setPlayer2] = useState('');
+  const [rounds, setRounds] = useState([]);
+  const [playerNames, setPlayerNames] = useState({ player1: '', player2: '' });
+
+  const playRound = () => {
+    const winner = determineWinner(player1, player2);
+    setRounds([...rounds, { player1, player2, winner }]);
+    // Reset choices
+    setPlayer1('');
+    setPlayer2('');
+  };
+
+  const handleChoice = (player, choice) => {
+    if (player === 'player1') setPlayer1(choice);
+    else setPlayer2(choice);
+  };
+
+  return (
+    <div>
+      <input
+        type="text"
+        placeholder="Player 1 Name"
+        value={playerNames.player1}
+        onChange={(e) => setPlayerNames({ ...playerNames, player1: e.target.value })}
+      />
+      <input
+        type="text"
+        placeholder="Player 2 Name"
+        value={playerNames.player2}
+        onChange={(e) => setPlayerNames({ ...playerNames, player2: e.target.value })}
+      />
+      <div>
+        {choices.map((choice) => (
+          <button key={choice} onClick={() => handleChoice('player1', choice)}>
+            {choice}
+          </button>
+        ))}
+      </div>
+      <div>
+        {choices.map((choice) => (
+          <button key={choice} onClick={() => handleChoice('player2', choice)}>
+            {choice}
+          </button>
+        ))}
+      </div>
+      <button onClick={playRound}>Play Round</button>
+      <div>
+        {rounds.map((round, index) => (
+          <div key={index}>
+            <p>Round {index + 1}:</p>
+            <p>Player 1 chose: {round.player1}</p>
+            <p>Player 2 chose: {round.player2}</p>
+            <p>Winner: {round.winner}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+export default Game;
