@@ -1,0 +1,28 @@
+// server.js
+const express = require('express');
+const mongoose = require('mongoose');
+const bodyParser = require('body-parser');
+const Game = require('./models/Game'); // You'll need to create a Mongoose model for the game data
+
+const app = express();
+const port = 3001;
+
+app.use(bodyParser.json());
+
+mongoose.connect('mongodb://localhost/rps-game', { useNewUrlParser: true });
+
+app.post('/play-round', async (req, res) => {
+  const { playerOneChoice, playerTwoChoice } = req.body;
+  // Implement game logic to determine the winner and update scores...
+  // Save round result to the database...
+  res.json({ winner, playerOneScore, playerTwoScore });
+});
+
+app.get('/game-history', async (req, res) => {
+  const games = await Game.find();
+  res.json(games);
+});
+
+app.listen(port, () => {
+  console.log(`Server listening on port ${port}`);
+});
